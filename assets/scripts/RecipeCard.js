@@ -105,13 +105,14 @@ class RecipeCard extends HTMLElement {
 
     let thumbnail = document.createElement('img');
     thumbnail.setAttribute('alt', 'Recipe Title');
-    thumbnail.setAttribute('src', searchForKey(data, 'thumbnailUrl'));
+    let thumbnailUrl = searchForKey(data, 'thumbnailUrl') || searchForKey(data, 'contentUrl');
+    thumbnail.setAttribute('src', thumbnailUrl);
     // console.log('img', searchForKey(data, 'thumbnailUrl'));
 
     // title hyperlink
     let title = document.createElement('p');
     title.setAttribute('class', 'title');
-    title.innerText = searchForKey(data, 'headline');
+    title.innerText = searchForKey(data, 'headline') || searchForKey(data, 'caption');
     let articleLink = document.createElement('a');
     articleLink.setAttribute('href', getUrl(data));
     title.appendChild(articleLink);
@@ -119,7 +120,8 @@ class RecipeCard extends HTMLElement {
     // org name
     let org = document.createElement('p');
     org.setAttribute('class', 'organization');
-    org.innerText = getOrganization(data);
+    org.innerText = searchForKey(data, 'name')
+    console.log('org', searchForKey(data, 'name'));
 
     //TODO: getting rating
     let rating = document.createElement('div');

@@ -5,13 +5,19 @@
 const recipes = [
   'https://introweb.tech/assets/json/ghostCookies.json',
   'https://introweb.tech/assets/json/birthdayCake.json',
-  'https://introweb.tech/assets/json/chocolateChip.json'
+  'https://introweb.tech/assets/json/chocolateChip.json',
+  // './assets/recipes/spooky-cookies.json',
+  './assets/recipes/carbonara.json',
+  './assets/recipes/chicken-curry.json',
+  './assets/recipes/dark-choco-cookies.json'
 ];
 
 // Once all of the recipes that were specified above have been fetched, their
 // data will be added to this object below. You may use whatever you like for the
 // keys as long as it's unique, one suggestion might but the URL itself
 const recipeData = {};
+
+let btn;
 
 window.addEventListener('DOMContentLoaded', init);
 
@@ -26,7 +32,7 @@ async function init() {
     return;
   };
   // console.log(1, recipeData);
-  
+  btn = document.querySelector('button');
   // Add the first three recipe cards to the page
   createRecipeCards();
   // Make the "Show more" button functional
@@ -80,11 +86,16 @@ function createRecipeCards() {
   // show any others you've added when the user clicks on the "Show more" button.
 
   // Part 1 Expose - TODO
+  let count = 0;
   for(const key in recipeData) {
+    if(count == 3) {
+      break;
+    }
     let recipeCard = document.createElement('recipe-card');
     console.log(5555, recipeData[key]);
     recipeCard.data = recipeData[key];
     document.querySelector('main').appendChild(recipeCard);
+    count++;
   }
 }
 
@@ -97,4 +108,26 @@ function bindShowMore() {
   // in the recipeData object where you stored them/
 
   // Part 2 Explore - TODO
+  btn.addEventListener('click', (e) => {
+    // console.log(btn.textContent);
+    if(btn.textContent === "Show more") {
+      let count = 0;
+      for(const key in recipeData) {
+        if(count >= 3) {
+          let recipeCard = document.createElement('recipe-card');
+          console.log(5555, recipeData[key]);
+          recipeCard.data = recipeData[key];
+          document.querySelector('main').appendChild(recipeCard);
+        }
+        count++; 
+      }
+      btn.textContent = "Show less";
+    } else {
+      for(let i = 0; i < 3; i++) {
+        let recipeCard = document.querySelector('recipe-card:last-child');
+        recipeCard.parentNode.removeChild(recipeCard);
+      }
+      btn.textContent = "Show more";
+    }
+  })
 }
