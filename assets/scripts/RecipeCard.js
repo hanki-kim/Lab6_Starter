@@ -111,6 +111,7 @@ class RecipeCard extends HTMLElement {
     // title hyperlink
     let title = document.createElement('p');
     title.setAttribute('class', 'title');
+    title.innerText = searchForKey(data, 'headline');
     let articleLink = document.createElement('a');
     articleLink.setAttribute('href', getUrl(data));
     title.appendChild(articleLink);
@@ -180,6 +181,8 @@ class RecipeCard extends HTMLElement {
     card.appendChild(rating);
     card.appendChild(time);
     card.appendChild(ingredients);
+
+    // console.log('title', searchForKey(data, 'headline'));
 
     // console.log('hello, recipecard.js');
     // console.log('org', getOrganization(data));
