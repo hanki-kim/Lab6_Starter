@@ -3,6 +3,8 @@ class RecipeCard extends HTMLElement {
     // Part 1 Expose - TODO
 
     // You'll want to attach the shadow DOM here
+    super();
+    const shadowRoot = this.attachShadow({mode: 'open'});
   }
 
   set data(data) {
@@ -100,6 +102,94 @@ class RecipeCard extends HTMLElement {
     // created in the constructor()
 
     // Part 1 Expose - TODO
+
+    let thumbnail = document.createElement('img');
+    thumbnail.setAttribute('alt', 'Recipe Title');
+    thumbnail.setAttribute('src', searchForKey(data, 'thumbnailUrl'));
+    // console.log('img', searchForKey(data, 'thumbnailUrl'));
+
+    // title hyperlink
+    let title = document.createElement('p');
+    title.setAttribute('class', 'title');
+    let articleLink = document.createElement('a');
+    articleLink.setAttribute('href', getUrl(data));
+    title.appendChild(articleLink);
+
+    // org name
+    let org = document.createElement('p');
+    org.setAttribute('class', 'organization');
+    org.innerText = getOrganization(data);
+
+    //TODO: getting rating
+    let rating = document.createElement('div');
+    rating.setAttribute('class', 'rating');
+
+    if(searchForKey(data, 'ratingValue') != undefined) {
+      let ratingValue = document.createElement('span');
+      ratingValue.textContent = searchForKey(data, 'ratingValue');
+      rating.appendChild(ratingValue);
+      console.log(ratingValue);
+
+      let ratingImg = document.createElement('img');
+      let r = searchForKey(data, 'ratingValue');
+      if(Math.round(r) == 5) {
+        console.log('adsfasdfasdf');
+        ratingImg.setAttribute('src', './assets/images/icons/5-star.svg');
+        ratingImg.setAttribute('alt', '5 stars');
+      } else if(Math.round(r) == 4) {
+        ratingImg.setAttribute('src', './assets/images/icons/4-star.svg');
+        ratingImg.setAttribute('alt', '4 stars');
+      } else if(Math.round(r) == 3) {
+        ratingImg.setAttribute('src', './assets/images/icons/3-star.svg');
+        ratingImg.setAttribute('alt', '3 stars');
+      } else if(Math.round(r) == 2) {
+        ratingImg.setAttribute('src', './assets/images/icons/2-star.svg');
+        ratingImg.setAttribute('alt', '2 stars');
+      } else if(Math.round(r) == 1) {
+        ratingImg.setAttribute('src', './assets/images/icons/1-star.svg');
+        ratingImg.setAttribute('alt', '1 stars');
+      } else if(Math.round(r) == 0) {
+        ratingImg.setAttribute('src', './assets/images/icons/0-star.svg');
+        ratingImg.setAttribute('alt', '0 stars');
+      } 
+      rating.appendChild(ratingImg);
+
+      let ratingCount = document.createElement('span');
+      ratingCount.textContent = "(" + searchForKey(data, 'ratingCount') + ")";
+      rating.appendChild(ratingCount);
+    } else {
+      let noRating = document.createElement('span');
+      noRating.textContent = "No Reviews";
+      rating.appendChild(noRating);
+    }
+
+    // total time
+    let time = document.createElement('time');
+    time.innerText = convertTime(searchForKey(data, 'totalTime'));
+
+    // ingredients preview list
+    let ingredients = document.createElement('p');
+    ingredients.setAttribute('class', 'ingredients');
+    ingredients.innerText = createIngredientList(searchForKey(data, 'recipeIngredient'));
+
+    this.shadowRoot.appendChild(styleElem);
+    this.shadowRoot.appendChild(card);
+    card.appendChild(thumbnail);
+    card.appendChild(title);
+    card.appendChild(org);
+    card.appendChild(rating);
+    card.appendChild(time);
+    card.appendChild(ingredients);
+
+    // console.log('hello, recipecard.js');
+    // console.log('org', getOrganization(data));
+    // console.log('url', getUrl(data));
+    // console.log('rating_img', searchForKey(data, 'aggregateRating'));
+    // let ratingValue = searchForKey(data, 'ratingValue');
+    // let ratingCount = searchForKey(data, 'ratingCount');
+    // console.log(ratingValue, ratingCount);
+    // console.log('ingredient list', createIngredientList(searchForKey(data, 'recipeIngredient')));
+    // console.log('time', convertTime(searchForKey(data, 'totalTime')));
   }
 }
 

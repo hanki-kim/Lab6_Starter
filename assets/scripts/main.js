@@ -11,7 +11,7 @@ const recipes = [
 // Once all of the recipes that were specified above have been fetched, their
 // data will be added to this object below. You may use whatever you like for the
 // keys as long as it's unique, one suggestion might but the URL itself
-const recipeData = {}
+const recipeData = {};
 
 window.addEventListener('DOMContentLoaded', init);
 
@@ -19,16 +19,21 @@ window.addEventListener('DOMContentLoaded', init);
 async function init() {
   // fetch the recipes and wait for them to load
   let fetchSuccessful = await fetchRecipes();
+  // console.log(1, recipeData);
   // if they didn't successfully load, quit the function
   if (!fetchSuccessful) {
     console.log('Recipe fetch unsuccessful');
     return;
   };
+  // console.log(1, recipeData);
+  
   // Add the first three recipe cards to the page
   createRecipeCards();
   // Make the "Show more" button functional
   bindShowMore();
 }
+// console.log(1, recipeData.length);
+// console.log('hello');
 
 async function fetchRecipes() {
   return new Promise((resolve, reject) => {
@@ -43,6 +48,27 @@ async function fetchRecipes() {
     // in the recipes folder and fetch them from there. You'll need to add their paths to the recipes array.
 
     // Part 1 Expose - TODO
+
+    for(let i = 0; i < recipes.length; i++) {
+      fetch(recipes[i])
+      .then(res => res.json())
+      .then(data => {
+        // console.log(recipes[i]);
+        recipeData[recipes[i]] = data;
+        // console.log(2, recipeData);
+      })
+      .then(() => {
+        // console.log(11111, recipeData);
+        // console.log(3, Object.keys(recipeData).length, recipes.length);
+        if(Object.keys(recipeData).length === recipes.length) {
+          console.log('Length of recipeData and recipes are equal. Calling resolve(true)')
+          resolve(true);
+        }
+      })
+      .catch(err => {
+        reject(false);
+      })
+    }
   });
 }
 
@@ -54,6 +80,12 @@ function createRecipeCards() {
   // show any others you've added when the user clicks on the "Show more" button.
 
   // Part 1 Expose - TODO
+  for(const key in recipeData) {
+    let recipeCard = document.createElement('recipe-card');
+    console.log(5555, recipeData[key]);
+    recipeCard.data = recipeData[key];
+    document.querySelector('main').appendChild(recipeCard);
+  }
 }
 
 function bindShowMore() {
